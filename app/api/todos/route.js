@@ -1,15 +1,22 @@
+import connectDB from "@/src/utils/dbConnect";
+import Todo from "@/src/models/Todo";
 import { NextResponse } from "next/server";
 
 // ! CREATE TODO
 export async function POST(request){ 
-    return new NextResponse(JSON.stringify({
-        message: "CREATE posts"
-    }))  
+    // ? CONNECT TO DB
+    connectDB();
+    // ? CREATE THE TODO
+    const todoData = await request.json()
+    const todo = await Todo.create(todoData)
+    return new NextResponse(JSON.stringify(todo))  
 }
 // ! FETCHING TODO'S
 export async function GET(request){ 
-    return new NextResponse(JSON.stringify({
-        message: "FETCHING all posts "
-    }))  
+    connectDB();
+    const todos = await Todo.find()
+    return new NextResponse(JSON.stringify(
+        todos
+    ))  
 }
 
